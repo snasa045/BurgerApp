@@ -20,10 +20,13 @@ const buildControls = (props) => {
         disabled = {props.disabled[control.type]}/>
     });
 
+    console.log(props.purchaseable);
+
     return (
         <div className="BuildControls">
             <p>Current Price: <strong>{props.price.toFixed(2)}$</strong></p>
             {buildControl}
+            <button className="OrderButton" onClick={props.ordered} disabled = {!props.purchaseable}>ORDER NOW</button>
         </div>
     );
 }

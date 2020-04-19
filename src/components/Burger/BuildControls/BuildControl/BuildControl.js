@@ -3,6 +3,7 @@ import React from 'react';
 import "./BuildControl.scss";
 
 const buildControl = (props) => {
+    // console.log(props);
     return (
         <div className="BuildControl">
             <div className="Label">{props.label}</div>
