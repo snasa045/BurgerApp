@@ -4,7 +4,8 @@ import { updateObject } from '../utility';
 const initialState = {
     ingredients: null,
     totalPrice: null,
-    error: false
+    error: false,
+    building: false
 }
 
 const INGREDIENT_PRICE = {
@@ -24,6 +25,7 @@ const burgerBuilderReducer = (state = initialState, action) => {
                     [action.ingredientName]: state.ingredients[action.ingredientName] + 1
                 },
                 totalPrice: state.totalPrice + INGREDIENT_PRICE[action.ingredientName],
+                building: true
             }
 
         case actionTypes.REMOVE_INGREDIENT:
@@ -33,14 +35,16 @@ const burgerBuilderReducer = (state = initialState, action) => {
                     ...state.ingredients,
                     [action.ingredientName]: state.ingredients[action.ingredientName] - 1
                 },
-                totalPrice: state.totalPrice - INGREDIENT_PRICE[action.ingredientName]
+                totalPrice: state.totalPrice - INGREDIENT_PRICE[action.ingredientName],
+                building: true
             }
 
         case actionTypes.SET_INGREDIENTS:
             return {
                 ...state,
                 ingredients: action.ingredients,
-                error: false
+                error: false,
+                building: false
             }
 
         case actionTypes.SET_PRICE:

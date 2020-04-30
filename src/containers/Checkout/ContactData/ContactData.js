@@ -112,10 +112,11 @@ class ContactData extends Component {
         const order = {
             ingredients: this.props.ings,
             price: this.props.price,
-            orderData: formData
+            orderData: formData,
+            userId: this.props.userId
         }
 
-        this.props.onOrderSubmit(order);
+        this.props.onOrderSubmit(order, this.props.token);
 
         // axios.post('/orders.json', order)
         //     .then(response => {
@@ -136,6 +137,10 @@ class ContactData extends Component {
     checkValidity(value, rules) {
         let isValid = true;
 
+        if (!rules) {
+            return true;
+        }
+
         if (rules.required) {
             isValid = value.trim() !== '' && isValid;
         }
@@ -146,6 +151,16 @@ class ContactData extends Component {
 
         if (rules.maxLength) {
             isValid = value.length <= rules.maxLength && isValid;
+        }
+
+        if (rules.isEmail) {
+            const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            isValid = pattern.test(value) && isValid
+        }
+
+        if (rules.isNumeric) {
+            const pattern = /^\d+$/;
+            isValid = pattern.test(value) && isValid;
         }
 
         return isValid;
@@ -224,13 +239,15 @@ const mapStateToProps = (state) => {
     return {
         ings: state.burgerBuilder.ingredients,
         price: state.burgerBuilder.totalPrice,
-        loading: state.order.loading
+        loading: state.order.loading,
+        token: state.auth.token,
+        userId: state.auth.userId
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onOrderSubmit: (orderData) => dispatch(actions.purchaseBurger(orderData))
+        onOrderSubmit: (orderData, token) => dispatch(actions.purchaseBurger(orderData, token))
     }
 } 
 

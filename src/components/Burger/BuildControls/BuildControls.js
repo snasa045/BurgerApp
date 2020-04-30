@@ -13,11 +13,11 @@ const controls = [
 const buildControls = (props) => {
     const buildControl = controls.map((control) => {
         return <BuildControl 
-        label = {control.label} 
-        key = {control.label}
-        added = {() => props.ingredientAdded(control.type)}
-        removed = {() => props.ingredientRemoved(control.type)}
-        disabled = {props.disabled[control.type]}/>
+                    label = {control.label} 
+                    key = {control.label}
+                    added = {() => props.ingredientAdded(control.type)}
+                    removed = {() => props.ingredientRemoved(control.type)}
+                    disabled = {props.disabled[control.type]}/>
     });
 
     console.log(props.purchaseable);
@@ -26,7 +26,7 @@ const buildControls = (props) => {
         <div className="BuildControls">
             <p>Current Price: <strong>{props.price.toFixed(2)}$</strong></p>
             {buildControl}
-            <button className="OrderButton" onClick={props.ordered} disabled = {!props.purchaseable}>ORDER NOW</button>
+            <button className="OrderButton" onClick={props.ordered} disabled = {!props.purchaseable}>{ props.isAuth ? 'ORDER NOW' : 'SIGNUP TO ORDER NOW'}</button> 
         </div>
     );
 }
