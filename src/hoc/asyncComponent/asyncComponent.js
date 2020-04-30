@@ -20,4 +20,4 @@ const asyncComponent = (importComponent) => {
     }
 }
 
-export default asyncComponent;
+export default asyncComponent; 
