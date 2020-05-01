@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import asyncComponent from './hoc/asyncComponent/asyncComponent';
 
@@ -28,13 +28,11 @@ const asyncAuth = asyncComponent(() => {
   return import('./containers/Auth/Auth');
 });
 
-class App extends Component {
+const App = props => {
+  useEffect(() => {
+    props.onTryAutoSignup();
+  }, []);
 
-  componentDidMount () {
-    this.props.onTryAutoSignup();
-  }
-
-  render() {
     let routes = (
       <React.Fragment>
         <Route path='/auth' component={asyncAuth} />
@@ -43,7 +41,7 @@ class App extends Component {
       </React.Fragment>
     );
 
-    if (this.props.isAuthenticate) {
+    if (props.isAuthenticate) {
       routes = (
         <React.Fragment>
           <Route path='/checkout' component={asyncCheckout} />
@@ -64,7 +62,6 @@ class App extends Component {
           </Layout>
       </div>
     );
-  }
 }
 
 const mapStateToProps = state => {
