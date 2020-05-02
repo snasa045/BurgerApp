@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import { connect } from 'react-redux';
-import asyncComponent from './hoc/asyncComponent/asyncComponent';
 
 import * as actions from './store/actions/index';
 import Layout from "./hoc/Layout/Layout";
@@ -14,17 +13,17 @@ import Logout from './containers/Auth/Logout/Logout';
 import { withRouter } from "react-router";
 
 // Lazy loaded component
-const asyncCheckout = asyncComponent(() => {
+const Checkout = React.lazy(() => {
   return import('./containers/Checkout/Checkout');
 });
 
 // Lazy loaded component
-const asyncOrders = asyncComponent(() => {
+const Orders = React.lazy(() => {
   return import('./containers/Orders/Orders');
 });
 
 // Lazy loaded component
-const asyncAuth = asyncComponent(() => {
+const Auth = React.lazy(() => {
   return import('./containers/Auth/Auth');
 });
 
@@ -35,7 +34,7 @@ const App = props => {
 
     let routes = (
       <React.Fragment>
-        <Route path='/auth' component={asyncAuth} />
+        <Route path='/auth' render={(props) => <Auth {...props}/>}/>
         <Route path='/' exact component={BurgerBuilder} />
         <Redirect to='/'/>
       </React.Fragment>
@@ -44,10 +43,10 @@ const App = props => {
     if (props.isAuthenticate) {
       routes = (
         <React.Fragment>
-          <Route path='/checkout' component={asyncCheckout} />
-          <Route path='/orders' component={asyncOrders} />
+          <Route path='/checkout' render={(props) => <Checkout {...props}/>}/>
+          <Route path='/orders' render={(props) => <Orders {...props}/>}/>
           <Route path='/logout' component={Logout} />
-          <Route path='/auth' component={asyncAuth} />
+          <Route path='/auth' render={(props) => <Auth {...props}/>}/>
           <Route path='/' exact component={BurgerBuilder} />
           <Redirect to='/'/>
         </React.Fragment>
@@ -56,9 +55,11 @@ const App = props => {
     return (
       <div>
           <Layout>
-            <Switch>
-              {routes}
-            </Switch>
+            <Suspense fallback={<p>Loading...</p>}>
+              <Switch>
+                {routes}
+              </Switch>
+            </Suspense>
           </Layout>
       </div>
     );
