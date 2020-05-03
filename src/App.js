@@ -28,9 +28,12 @@ const Auth = React.lazy(() => {
 });
 
 const App = props => {
+
+  const { onTryAutoSignup } = props
+  
   useEffect(() => {
-    props.onTryAutoSignup();
-  }, []);
+    onTryAutoSignup();
+  }, [onTryAutoSignup]);
 
     let routes = (
       <React.Fragment>
